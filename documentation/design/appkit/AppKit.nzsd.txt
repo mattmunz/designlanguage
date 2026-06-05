@@ -1,0 +1,14 @@
+App
+* ID String
+* Version String
+* ConfigName String
+
+CLI
+* AppID String
+* Name String
+* ShortDescription String
+* NewRootCommand ()
+
+// TODO Need to configure type alias for CobraCommand
+CommandFactory
+* New () -> (cmd CobraCommand)
