@@ -1,0 +1,13 @@
+User
+
+Console
+* Version String
+* CommandHandlers []CommandHandler
+
+CommandHandler
+* Description String
+* Interpet (Command String) -> (Response String)
+* GetConfigs (Time DateTime) -> (Configs []String)
+
+Browser
+* GetElement (ID String) -> (Element Element)

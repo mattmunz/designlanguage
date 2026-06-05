@@ -1,0 +1,14 @@
+Person
+* Name String
+
+Client
+* User Person
+* PersonRepository PersonRepository
+
+PersonRepository
+* Add (Person Person) -> ()
+* Get (Name String) -> (Person Person)
+
+Rectangle
+* Length Int
+* Width Int
