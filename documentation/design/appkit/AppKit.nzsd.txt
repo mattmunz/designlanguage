@@ -3,12 +3,16 @@ App
 * Version String
 * ConfigName String
 
-CLI
+CLI :: Command
 * AppID String
 * Name String
 * ShortDescription String
 * NewRootCommand ()
+* SetLogger(logger Logger)
 
 // TODO Need to configure type alias for CobraCommand
 CommandFactory
 * New () -> (cmd CobraCommand)
+
+Command 
+* Execute ()
