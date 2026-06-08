@@ -13,9 +13,9 @@ import (
 
 	"github.com/dave/jennifer/jen"
 	klog "github.com/go-kit/kit/log"
-	akstrings "github.com/mattmunz/designlanguage/appkit/strings"
+	akstrings "github.com/mattmunz/appkit/strings"
 
-	"github.com/mattmunz/designlanguage/appkit/misc"
+	"github.com/mattmunz/appkit/misc"
 	"github.com/mattmunz/designlanguage/model"
 )
 

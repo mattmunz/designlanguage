@@ -4,8 +4,6 @@ Nonzero Sum Design Language definition and tools
 ## TODO
 
 * NZS design tools -- A set of tools for working with the NZS design language
-  * X DO a round of TODOs
-  * git commit
   * Move appkit to its own repository, and later rework sundries to use it.
   * Use it for an existing project -- generate model interfaces
   * Add inline documentation in the source file ending up in the output source code

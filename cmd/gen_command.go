@@ -5,10 +5,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"github.com/mattmunz/designlanguage/appkit/cmd"
+	"github.com/mattmunz/appkit/cmd"
+	"github.com/mattmunz/appkit/model"
 	"github.com/mattmunz/designlanguage/gen"
-
-	"github.com/mattmunz/designlanguage/appkit/model"
 )
 
 func newGenCmd(cli model.CLI) *cobra.Command {
