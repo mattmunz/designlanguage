@@ -1,8 +1,6 @@
 package model
 
 import (
-	"errors"
-
 	klog "github.com/go-kit/kit/log"
 	"github.com/spf13/cobra"
 )
@@ -18,10 +16,17 @@ type App interface {
 }
 
 type CLI interface {
-	AppID() string
+	Command
+	App() App
 	Name() string
 	ShortDescription() string
-	NewRootCommand(logger klog.Logger) (*cobra.Command, error)
+	NewRootCommand() (*cobra.Command, error)
+	Logger() klog.Logger
+	SetLogger(logger klog.Logger)
+}
+
+type Command interface {
+	Execute()
 }
 
 type CommandFactory interface {
@@ -51,35 +56,5 @@ func NewApp(id, version, configName string) App {
 		id:         id,
 		version:    version,
 		configName: configName,
-	}
-}
-
-type cliImpl struct {
-	appID            string
-	name             string
-	shortDescription string
-}
-
-func (c *cliImpl) AppID() string {
-	return c.appID
-}
-
-func (c *cliImpl) Name() string {
-	return c.name
-}
-
-func (c *cliImpl) ShortDescription() string {
-	return c.shortDescription
-}
-
-func (c *cliImpl) NewRootCommand(_ klog.Logger) (*cobra.Command, error) {
-	return nil, errors.New("Not implemented")
-}
-
-func NewCLI(appID, name, shortDescription string) CLI {
-	return &cliImpl{
-		appID:            appID,
-		name:             name,
-		shortDescription: shortDescription,
 	}
 }

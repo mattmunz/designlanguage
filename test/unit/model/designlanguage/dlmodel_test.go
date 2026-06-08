@@ -122,16 +122,3 @@ func getTestDataPath(t *testing.T) string {
 	}
 	return value
 }
-
-// TODO Doesn't work. WTF, Golang?
-// func getTestDataPath() string {
-// 	// /Users/mattmunz/Google Drive/Projects/Programming/gowork/src/github.com/mattmunz/sundries/test/unit/model/designlanguage/dlmodel_test.go
-// 	_, filename, _, _ := runtime.Caller(0)
-
-// 	// dir := os.NewFile(uintptr(os.O_RDONLY), filename)
-
-// 	// if !strings.Contains(filename, "\"") {
-// 	// 	filename = fmt.Sprintf("\"%s\"", filename)
-// 	// }
-// 	return filepath.Join(filepath.Dir(filepath.Dir(filepath.Clean(filename))), "data/Test.1.nzsd.txt")
-// }

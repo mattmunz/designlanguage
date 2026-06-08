@@ -9,54 +9,46 @@ import (
 	klog "github.com/go-kit/kit/log"
 
 	"github.com/mattmunz/designlanguage/appkit/misc"
-	"github.com/mattmunz/designlanguage/model/designlanguage"
+	"github.com/mattmunz/designlanguage/model"
 )
 
 type DesignList struct {
-	designs []designlanguage.Design
+	designs []model.Design
 }
 
 func NewDesignList() *DesignList {
-	return &DesignList{[]designlanguage.Design{}}
+	return &DesignList{[]model.Design{}}
 }
 
-func (d *DesignList) Add(model designlanguage.Design) {
-	d.designs = append(d.designs, model)
+func (d *DesignList) Add(design model.Design) {
+	d.designs = append(d.designs, design)
 }
 
-func (d *DesignList) All() []designlanguage.Design {
+func (d *DesignList) All() []model.Design {
 	return d.designs
 }
 
 // Collect all design objects from design files.
-// designPath is root dir of designs
+// designPath is root dir of designs.
 // path is the path to the specific design file being parsed.
-// TODO Implement this to read in the file to a set of designlanguage.Design objects.
-// They should share a namespace defined by their path.
-func HandleDLMFile(logger klog.Logger, parsedModels *DesignList, designPath, path string, info fs.FileInfo, dryRun bool, outputPath string,
+func HandleDLMFile(logger klog.Logger, parsedDesigns *DesignList, designPath, path string, info fs.FileInfo, dryRun bool, outputPath string,
 	err error) error {
 	if err != nil {
 		return err
 	}
 
-	// TODO Filter out files that don't end in ".Design.md"
-	namespace, fileName, err := ParseDLMFilePath(designPath, path)
+	namespace, _, err := ParseDLMFilePath(designPath, path)
 	if err != nil {
-		// TODO if err type is wrongfiletype then skip.
 		return err
 	}
 
-	misc.LogMessage(logger, fmt.Sprintf("TODO Does filename (%s) matter?", fileName))
+	misc.LogMessage(logger, fmt.Sprintf("Parsing design (%s) / (%s)...", designPath, path))
 
-	// TODO Somewhere past this a panic on read!!!
-
-	misc.LogMessage(logger, fmt.Sprintf("TODO Parsing design (%s) / (%s)...", designPath, path))
-
-	design := designlanguage.Parse(path, namespace)
-
-	misc.LogMessage(logger, "TODO Adding design...")
-
-	parsedModels.Add(design)
+	design, err := model.Parse(path, namespace)
+	if err != nil {
+		return err
+	}
+	parsedDesigns.Add(design)
 
 	return nil
 }

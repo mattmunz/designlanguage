@@ -3,55 +3,52 @@ package dl
 import (
 	"testing"
 
+	"github.com/mattmunz/designlanguage/gen"
+	"github.com/mattmunz/designlanguage/model"
 	"github.com/stretchr/testify/require"
-
-	"github.com/mattmunz/designlanguage/model/designlanguage"
-	dl1 "github.com/mattmunz/designlanguage/model/dl"
 )
 
-// TODO MAke test for antlr parsing a document with a method with no arrow.
+var plane = gen.NewComponent("Plane")
 
-var plane = dl1.NewComponent("Plane")
-
-var rectangle = designlanguage.NewEntity(
-	"Rectangle", []designlanguage.Attribute{designlanguage.NewAttribute("Length", "int", false), designlanguage.NewAttribute("Width", "int", false)},
+var rectangle = model.NewEntity(
+	"Rectangle", []model.Attribute{model.NewAttribute("Length", "int", false), model.NewAttribute("Width", "int", false)},
 )
 
-var labelledValue = designlanguage.NewEntity(
-	"LabelledValue", []designlanguage.Attribute{designlanguage.NewAttribute("Label", "String", false), designlanguage.NewAttribute("Value", "Int", false)},
+var labelledValue = model.NewEntity(
+	"LabelledValue", []model.Attribute{model.NewAttribute("Label", "String", false), model.NewAttribute("Value", "Int", false)},
 )
 
-var personRepo = designlanguage.NewObject(
-	"PersonRepository", []designlanguage.Attribute{},
-	[]designlanguage.Method{
-		designlanguage.NewMethod("Add", []designlanguage.Param{designlanguage.NewParam("Person", designlanguage.NewType("Person", false))}, []designlanguage.Param{}),
-		designlanguage.NewMethod("Get",
-			[]designlanguage.Param{designlanguage.NewParam("name", designlanguage.NewType("String", false))},
-			[]designlanguage.Param{designlanguage.NewParam("person", designlanguage.NewType("Person", false))}),
+var personRepo = model.NewObject(
+	"PersonRepository", []model.Attribute{},
+	[]model.Method{
+		model.NewMethod("Add", []model.Param{model.NewParam("Person", model.NewType("Person", false))}, []model.Param{}),
+		model.NewMethod("Get",
+			[]model.Param{model.NewParam("name", model.NewType("String", false))},
+			[]model.Param{model.NewParam("person", model.NewType("Person", false))}),
 	})
 
 func TestRenderDesign(t *testing.T) {
 	spinner := newSpinner()
 
-	design := designlanguage.NewDesign(
-		"Geometry", []designlanguage.Component{plane, rectangle, spinner}, []designlanguage.Entity{rectangle}, []designlanguage.Object{spinner},
+	design := model.NewDesign(
+		"Geometry", []model.Component{plane, rectangle, spinner}, []model.Entity{rectangle}, []model.Object{spinner},
 	)
 
-	source := dl1.RenderDesignSummary(design)
+	source := gen.RenderDesignSummary(design)
 
 	require.Equal(t, "Namespace: Geometry, Components: 3, Entities: 1, Objects: 1", source)
 }
 
-func newSpinner() designlanguage.Object {
-	intType := designlanguage.NewType("int", false)
+func newSpinner() model.Object {
+	intType := model.NewType("int", false)
 
-	method := []designlanguage.Method{designlanguage.NewMethod("Spin",
-		[]designlanguage.Param{designlanguage.NewParam("velocity", intType), designlanguage.NewParam("duration", intType)},
-		[]designlanguage.Param{}),
+	method := []model.Method{model.NewMethod("Spin",
+		[]model.Param{model.NewParam("velocity", intType), model.NewParam("duration", intType)},
+		[]model.Param{}),
 	}
 
-	return designlanguage.NewObject(
-		"Spinner", []designlanguage.Attribute{designlanguage.NewAttribute("Radius", "int", false)},
+	return model.NewObject(
+		"Spinner", []model.Attribute{model.NewAttribute("Radius", "int", false)},
 		method,
 	)
 }
@@ -59,7 +56,7 @@ func newSpinner() designlanguage.Object {
 func TestRenderEmptyComponent(t *testing.T) {
 	expectedSource := "type Plane interface{}"
 
-	src, err := dl1.RenderComponentSource(plane)
+	src, err := gen.RenderComponentSource(plane)
 
 	require.NoError(t, err)
 	require.Equal(t, expectedSource, src)
@@ -71,7 +68,7 @@ func TestRenderEntity(t *testing.T) {
 	Width() int
 }`
 
-	src, err := dl1.RenderEntitySource(rectangle)
+	src, err := gen.RenderEntitySource(rectangle)
 
 	require.NoError(t, err)
 	require.Equal(t, expectedSource, src)
@@ -85,7 +82,7 @@ func TestTypeAlias(t *testing.T) {
 	Value() int
 }`
 
-	src, err := dl1.RenderEntitySource(labelledValue)
+	src, err := gen.RenderEntitySource(labelledValue)
 
 	require.NoError(t, err)
 	require.Equal(t, expectedSource, src)
@@ -97,7 +94,7 @@ func TestRenderObject(t *testing.T) {
 	Spin(velocity int, duration int)
 }`
 
-	src, err := dl1.RenderObjectSource(newSpinner())
+	src, err := gen.RenderObjectSource(newSpinner())
 
 	require.NoError(t, err)
 	require.Equal(t, expectedSource, src)
@@ -109,7 +106,7 @@ func TestRenderPersonRepository(t *testing.T) {
 	Get(name string) (person Person)
 }`
 
-	src, err := dl1.RenderObjectSource(personRepo)
+	src, err := gen.RenderObjectSource(personRepo)
 
 	require.NoError(t, err)
 	require.Equal(t, expectedSource, src)
@@ -132,11 +129,11 @@ type Spinner interface {
 `
 	spinner := newSpinner()
 
-	design := designlanguage.NewDesign(
-		"geometry", []designlanguage.Component{plane, rectangle, spinner}, []designlanguage.Entity{rectangle}, []designlanguage.Object{spinner},
+	design := model.NewDesign(
+		"geometry", []model.Component{plane, rectangle, spinner}, []model.Entity{rectangle}, []model.Object{spinner},
 	)
 
-	src, err := dl1.RenderDesignSource(design)
+	src, err := gen.RenderDesignSource(design)
 	require.NoError(t, err)
 	require.Equal(t, expectedSource, src)
 }

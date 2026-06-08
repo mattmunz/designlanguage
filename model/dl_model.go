@@ -1,5 +1,4 @@
-// TODO This package is dittoing. Streamline and update dev.sh generatot to match.
-package designlanguage
+package model
 
 type Design interface {
 	Namespace() string
@@ -39,8 +38,7 @@ func NewParam(name string, type1 Type) Param {
 
 type Type interface {
 	Named
-	// TODO Rename IsArray
-	Array() bool
+	IsArray() bool
 }
 
 // Component is a computational object that may be composed of other components.
@@ -173,11 +171,10 @@ func (t *typ) Name() string {
 	return t.name
 }
 
-func (t *typ) Array() bool {
+func (t *typ) IsArray() bool {
 	return t.array
 }
 
-// TODO Should take type object, not isArray
 func NewAttribute(name, typeName string, isArray bool) Attribute {
 	return &attribute{
 		name: name,

@@ -22,7 +22,6 @@ test() {
 }
 
 case $1 in
-  # TODO Is this right?
   b  | build) go install ./cmd/designlanguage/designlanguage.go;;
   f  | format) go fmt ./*;;  
   g  | gen) gen;;
