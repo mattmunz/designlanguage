@@ -3,8 +3,8 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/mattmunz/designlanguage/appkit"
-	"github.com/mattmunz/designlanguage/appkit/model"
+	"github.com/mattmunz/appkit"
+	"github.com/mattmunz/appkit/model"
 )
 
 var (

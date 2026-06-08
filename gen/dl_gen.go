@@ -8,7 +8,7 @@ import (
 
 	klog "github.com/go-kit/kit/log"
 
-	"github.com/mattmunz/designlanguage/appkit/misc"
+	"github.com/mattmunz/appkit/misc"
 	"github.com/mattmunz/designlanguage/model"
 )
 

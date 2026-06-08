@@ -3,6 +3,9 @@
 # Setup:
 # Install antlr: pip install antlr4-tools
 
+# To get from private reops (temporary)
+# GOPRIVATE="github.com/mattmunz/appkit" go get github.com/mattmunz/appkit
+
 gen() {
   # antlr4-parse documentation/DesignLanguage.g4 design ./test/data/Test.1.nzsd.txt -tree
 
