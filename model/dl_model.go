@@ -1,6 +1,9 @@
 package model
 
 type Design interface {
+	Commented
+
+	Author() string
 	Namespace() string
 	Components() []Component
 	Entities() []Entity
@@ -11,18 +14,26 @@ type Named interface {
 	Name() string
 }
 
+type named struct {
+	name string
+}
+
+func (n *named) Name() string {
+	return n.name
+}
+
+func newNamed(name string) Named {
+	return &named{name}
+}
+
 type Param interface {
 	Named
 	Type() Type
 }
 
 type param struct {
-	name string
-	typ  Type
-}
-
-func (p *param) Name() string {
-	return p.name
+	Named
+	typ Type
 }
 
 func (p *param) Type() Type {
@@ -31,9 +42,13 @@ func (p *param) Type() Type {
 
 func NewParam(name string, type1 Type) Param {
 	return &param{
-		name: name,
-		typ:  type1,
+		newNamed(name),
+		type1,
 	}
+}
+
+type Commented interface {
+	Comment() string
 }
 
 type Type interface {
@@ -45,10 +60,24 @@ type Type interface {
 // It exposes its functionality through a single interface.
 type Component interface {
 	Named
+	Commented
+}
+
+type component struct {
+	Named
+	Commented
+}
+
+func NewComponent(name, comment string) Component {
+	return &component{
+		newNamed(name),
+		newCommented(comment),
+	}
 }
 
 // Attribute is the named part of an interface, designating a sub-component.
 type Attribute interface {
+	Commented
 	Param
 }
 
@@ -81,9 +110,9 @@ type Representation interface {
 	Decode(encoded string) (Entity, error)
 }
 
-func NewObject(name string, attributes []Attribute, methods []Method) Object {
+func NewObject(name, comment string, attributes []Attribute, methods []Method) Object {
 	return &object{
-		NewEntity(name, attributes),
+		NewEntity(name, comment, attributes),
 		methods,
 	}
 }
@@ -97,29 +126,43 @@ func (o *object) Methods() []Method {
 	return o.methods
 }
 
-func NewEntity(name string, attributes []Attribute) Entity {
-	return &entity{name, attributes}
+func NewEntity(name, comment string, attributes []Attribute) Entity {
+	return &entity{NewComponent(name, comment), attributes}
 }
 
 type entity struct {
-	name       string
+	Component
 	attributes []Attribute
-}
-
-func (e *entity) Name() string {
-	return e.name
 }
 
 func (e *entity) Attributes() []Attribute {
 	return e.attributes
 }
 
+type commented struct {
+	comment string
+}
+
+func (c *commented) Comment() string {
+	return c.comment
+}
+
+func newCommented(commentText string) Commented {
+	return &commented{commentText}
+}
+
 // design is a concrete implementation of the Design interface
 type design struct {
+	Commented
+	author     string
 	namespace  string
 	components []Component
 	entities   []Entity
 	objects    []Object
+}
+
+func (d *design) Author() string {
+	return d.author
 }
 
 func (d *design) Namespace() string {
@@ -138,8 +181,10 @@ func (d *design) Objects() []Object {
 	return d.objects
 }
 
-func NewDesign(namespace string, components []Component, entities []Entity, objects []Object) Design {
+func NewDesign(author, comment, namespace string, components []Component, entities []Entity, objects []Object) Design {
 	return &design{
+		newCommented(comment),
+		author,
 		namespace,
 		components,
 		entities,
@@ -149,12 +194,9 @@ func NewDesign(namespace string, components []Component, entities []Entity, obje
 
 // attribute is a concrete implementation of the Attribute interface
 type attribute struct {
-	name string
-	typ  Type
-}
-
-func (a *attribute) Name() string {
-	return a.name
+	Named
+	Commented
+	typ Type
 }
 
 func (a *attribute) Type() Type {
@@ -175,10 +217,11 @@ func (t *typ) IsArray() bool {
 	return t.array
 }
 
-func NewAttribute(name, typeName string, isArray bool) Attribute {
+func NewAttribute(name, comment, typeName string, isArray bool) Attribute {
 	return &attribute{
-		name: name,
-		typ:  NewType(typeName, isArray),
+		newNamed(name),
+		newCommented(comment),
+		NewType(typeName, isArray),
 	}
 }
 
@@ -191,13 +234,9 @@ func NewType(name string, isArray bool) Type {
 
 // method is a concrete implementation of the Method interface
 type method struct {
-	name       string
+	Component
 	params     []Param
 	returnVals []Param
-}
-
-func (m *method) Name() string {
-	return m.name
 }
 
 func (m *method) Params() []Param {
@@ -208,10 +247,10 @@ func (m *method) ReturnVals() []Param {
 	return m.returnVals
 }
 
-func NewMethod(name string, params, returnVals []Param) Method {
+func NewMethod(name, comment string, params, returnVals []Param) Method {
 	return &method{
-		name:       name,
-		params:     params,
-		returnVals: returnVals,
+		NewComponent(name, comment),
+		params,
+		returnVals,
 	}
 }

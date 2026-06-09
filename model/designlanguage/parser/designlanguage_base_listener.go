@@ -26,11 +26,29 @@ func (s *BaseDesignLanguageListener) EnterDesign(ctx *DesignContext) {}
 // ExitDesign is called when production design is exited.
 func (s *BaseDesignLanguageListener) ExitDesign(ctx *DesignContext) {}
 
+// EnterPreamble is called when production preamble is entered.
+func (s *BaseDesignLanguageListener) EnterPreamble(ctx *PreambleContext) {}
+
+// ExitPreamble is called when production preamble is exited.
+func (s *BaseDesignLanguageListener) ExitPreamble(ctx *PreambleContext) {}
+
+// EnterAuthor is called when production author is entered.
+func (s *BaseDesignLanguageListener) EnterAuthor(ctx *AuthorContext) {}
+
+// ExitAuthor is called when production author is exited.
+func (s *BaseDesignLanguageListener) ExitAuthor(ctx *AuthorContext) {}
+
 // EnterComponent is called when production component is entered.
 func (s *BaseDesignLanguageListener) EnterComponent(ctx *ComponentContext) {}
 
 // ExitComponent is called when production component is exited.
 func (s *BaseDesignLanguageListener) ExitComponent(ctx *ComponentContext) {}
+
+// EnterSimpleComponent is called when production simpleComponent is entered.
+func (s *BaseDesignLanguageListener) EnterSimpleComponent(ctx *SimpleComponentContext) {}
+
+// ExitSimpleComponent is called when production simpleComponent is exited.
+func (s *BaseDesignLanguageListener) ExitSimpleComponent(ctx *SimpleComponentContext) {}
 
 // EnterField is called when production field is entered.
 func (s *BaseDesignLanguageListener) EnterField(ctx *FieldContext) {}

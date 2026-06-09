@@ -1,15 +1,21 @@
 
 grammar DesignLanguage;
 
-design: (component NEWLINE?)* EOF;
+design: preamble? (component NEWLINE)* EOF;
 
-component: NAME NEWLINE field*;
+preamble: (author NEWLINE (COMMENT NEWLINE)? | (COMMENT NEWLINE)) NEWLINE;
 
-field: attribute | method;
+author: AUTHOR_START AUTHOR_NAME;
 
-attribute: ASTERISK ' ' param NEWLINE;
+component: simpleComponent | simpleComponent (field NEWLINE)+;
 
-method: ASTERISK ' ' NAME ' ' params ' ' ARROW ' ' params NEWLINE;
+simpleComponent: NAME NEWLINE (COMMENT NEWLINE)?;
+
+field: FIELD_START (attribute | method);
+
+attribute:  param (' ' COMMENT)?;
+
+method: NAME ' ' params ' ' (ARROW ' ' params)? (' ' COMMENT)?;
 
 param: NAME ' ' type;
 
@@ -21,13 +27,27 @@ type: ARRAY? NAME;
 
 ARRAY: '[]';
 
-NAME: [A-Z][a-zA-Z]*;
+ARROW: '->';
 
 ASTERISK: '*';
 
-ARROW: '->';
+FIELD_START: ASTERISK ' ';
+
+AUTHOR_NAME: [A-Z][a-zA-Z ]*;
+
+AUTHOR_START: COMMENT_START 'Author: ';
+
+COMMENT: COMMENT_START COMMENT_TEXT;
+
+COMMENT_START: '-- ';
+
+COMMENT_TEXT: [A-Z]([\p{L}\p{N}\p{Z}]|SPECIAL_CHAR)*;
+
+NAME: [A-Z][a-zA-Z]*;
 
 NEWLINE: '\r'? '\n';
+
+SPECIAL_CHAR : [!@#$%^&*()_\-+={[}\]|:;"'<,>.?~`] ;
 
 // // Whitespace to be ignored.
 // WS: [ \t]+ -> skip;
