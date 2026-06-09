@@ -32,48 +32,67 @@ var DesignLanguageParserStaticData struct {
 func designlanguageParserInit() {
 	staticData := &DesignLanguageParserStaticData
 	staticData.LiteralNames = []string{
-		"", "' '", "'()'", "'('", "')'", "'[]'", "", "'*'", "'->'",
+		"", "' '", "'()'", "'('", "')'", "'[]'", "'->'", "'*'", "", "", "",
+		"", "'-- '",
 	}
 	staticData.SymbolicNames = []string{
-		"", "", "", "", "", "ARRAY", "NAME", "ASTERISK", "ARROW", "NEWLINE",
+		"", "", "", "", "", "ARRAY", "ARROW", "ASTERISK", "FIELD_START", "AUTHOR_NAME",
+		"AUTHOR_START", "COMMENT", "COMMENT_START", "COMMENT_TEXT", "NAME",
+		"NEWLINE", "SPECIAL_CHAR",
 	}
 	staticData.RuleNames = []string{
-		"design", "component", "field", "attribute", "method", "param", "params",
-		"type",
+		"design", "preamble", "author", "component", "simpleComponent", "field",
+		"attribute", "method", "param", "params", "type",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 9, 80, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7, 4,
-		2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 1, 0, 1, 0, 3, 0, 19, 8, 0, 5, 0, 21,
-		8, 0, 10, 0, 12, 0, 24, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 5, 1, 31, 8,
-		1, 10, 1, 12, 1, 34, 9, 1, 1, 2, 1, 2, 3, 2, 38, 8, 2, 1, 3, 1, 3, 1, 3,
-		1, 3, 1, 3, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4,
-		1, 4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 3, 6, 63, 8, 6, 1, 6, 1,
-		6, 5, 6, 67, 8, 6, 10, 6, 12, 6, 70, 9, 6, 1, 6, 3, 6, 73, 8, 6, 1, 7,
-		3, 7, 76, 8, 7, 1, 7, 1, 7, 1, 7, 0, 0, 8, 0, 2, 4, 6, 8, 10, 12, 14, 0,
-		0, 79, 0, 22, 1, 0, 0, 0, 2, 27, 1, 0, 0, 0, 4, 37, 1, 0, 0, 0, 6, 39,
-		1, 0, 0, 0, 8, 44, 1, 0, 0, 0, 10, 55, 1, 0, 0, 0, 12, 72, 1, 0, 0, 0,
-		14, 75, 1, 0, 0, 0, 16, 18, 3, 2, 1, 0, 17, 19, 5, 9, 0, 0, 18, 17, 1,
-		0, 0, 0, 18, 19, 1, 0, 0, 0, 19, 21, 1, 0, 0, 0, 20, 16, 1, 0, 0, 0, 21,
-		24, 1, 0, 0, 0, 22, 20, 1, 0, 0, 0, 22, 23, 1, 0, 0, 0, 23, 25, 1, 0, 0,
-		0, 24, 22, 1, 0, 0, 0, 25, 26, 5, 0, 0, 1, 26, 1, 1, 0, 0, 0, 27, 28, 5,
-		6, 0, 0, 28, 32, 5, 9, 0, 0, 29, 31, 3, 4, 2, 0, 30, 29, 1, 0, 0, 0, 31,
-		34, 1, 0, 0, 0, 32, 30, 1, 0, 0, 0, 32, 33, 1, 0, 0, 0, 33, 3, 1, 0, 0,
-		0, 34, 32, 1, 0, 0, 0, 35, 38, 3, 6, 3, 0, 36, 38, 3, 8, 4, 0, 37, 35,
-		1, 0, 0, 0, 37, 36, 1, 0, 0, 0, 38, 5, 1, 0, 0, 0, 39, 40, 5, 7, 0, 0,
-		40, 41, 5, 1, 0, 0, 41, 42, 3, 10, 5, 0, 42, 43, 5, 9, 0, 0, 43, 7, 1,
-		0, 0, 0, 44, 45, 5, 7, 0, 0, 45, 46, 5, 1, 0, 0, 46, 47, 5, 6, 0, 0, 47,
-		48, 5, 1, 0, 0, 48, 49, 3, 12, 6, 0, 49, 50, 5, 1, 0, 0, 50, 51, 5, 8,
-		0, 0, 51, 52, 5, 1, 0, 0, 52, 53, 3, 12, 6, 0, 53, 54, 5, 9, 0, 0, 54,
-		9, 1, 0, 0, 0, 55, 56, 5, 6, 0, 0, 56, 57, 5, 1, 0, 0, 57, 58, 3, 14, 7,
-		0, 58, 11, 1, 0, 0, 0, 59, 73, 5, 2, 0, 0, 60, 62, 5, 3, 0, 0, 61, 63,
-		3, 10, 5, 0, 62, 61, 1, 0, 0, 0, 62, 63, 1, 0, 0, 0, 63, 68, 1, 0, 0, 0,
-		64, 65, 5, 1, 0, 0, 65, 67, 3, 10, 5, 0, 66, 64, 1, 0, 0, 0, 67, 70, 1,
-		0, 0, 0, 68, 66, 1, 0, 0, 0, 68, 69, 1, 0, 0, 0, 69, 71, 1, 0, 0, 0, 70,
-		68, 1, 0, 0, 0, 71, 73, 5, 4, 0, 0, 72, 59, 1, 0, 0, 0, 72, 60, 1, 0, 0,
-		0, 73, 13, 1, 0, 0, 0, 74, 76, 5, 5, 0, 0, 75, 74, 1, 0, 0, 0, 75, 76,
-		1, 0, 0, 0, 76, 77, 1, 0, 0, 0, 77, 78, 5, 6, 0, 0, 78, 15, 1, 0, 0, 0,
-		8, 18, 22, 32, 37, 62, 68, 72, 75,
+		4, 1, 16, 115, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
+		10, 1, 0, 3, 0, 24, 8, 0, 1, 0, 1, 0, 1, 0, 5, 0, 29, 8, 0, 10, 0, 12,
+		0, 32, 9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 40, 8, 1, 1, 1,
+		1, 1, 3, 1, 44, 8, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1, 3, 1,
+		3, 1, 3, 4, 3, 56, 8, 3, 11, 3, 12, 3, 57, 3, 3, 60, 8, 3, 1, 4, 1, 4,
+		1, 4, 1, 4, 3, 4, 66, 8, 4, 1, 5, 1, 5, 1, 5, 3, 5, 71, 8, 5, 1, 6, 1,
+		6, 1, 6, 3, 6, 76, 8, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 3, 7,
+		85, 8, 7, 1, 7, 1, 7, 3, 7, 89, 8, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 9, 1,
+		9, 1, 9, 3, 9, 98, 8, 9, 1, 9, 1, 9, 5, 9, 102, 8, 9, 10, 9, 12, 9, 105,
+		9, 9, 1, 9, 3, 9, 108, 8, 9, 1, 10, 3, 10, 111, 8, 10, 1, 10, 1, 10, 1,
+		10, 0, 0, 11, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 0, 0, 118, 0, 23,
+		1, 0, 0, 0, 2, 43, 1, 0, 0, 0, 4, 47, 1, 0, 0, 0, 6, 59, 1, 0, 0, 0, 8,
+		61, 1, 0, 0, 0, 10, 67, 1, 0, 0, 0, 12, 72, 1, 0, 0, 0, 14, 77, 1, 0, 0,
+		0, 16, 90, 1, 0, 0, 0, 18, 107, 1, 0, 0, 0, 20, 110, 1, 0, 0, 0, 22, 24,
+		3, 2, 1, 0, 23, 22, 1, 0, 0, 0, 23, 24, 1, 0, 0, 0, 24, 30, 1, 0, 0, 0,
+		25, 26, 3, 6, 3, 0, 26, 27, 5, 15, 0, 0, 27, 29, 1, 0, 0, 0, 28, 25, 1,
+		0, 0, 0, 29, 32, 1, 0, 0, 0, 30, 28, 1, 0, 0, 0, 30, 31, 1, 0, 0, 0, 31,
+		33, 1, 0, 0, 0, 32, 30, 1, 0, 0, 0, 33, 34, 5, 0, 0, 1, 34, 1, 1, 0, 0,
+		0, 35, 36, 3, 4, 2, 0, 36, 39, 5, 15, 0, 0, 37, 38, 5, 11, 0, 0, 38, 40,
+		5, 15, 0, 0, 39, 37, 1, 0, 0, 0, 39, 40, 1, 0, 0, 0, 40, 44, 1, 0, 0, 0,
+		41, 42, 5, 11, 0, 0, 42, 44, 5, 15, 0, 0, 43, 35, 1, 0, 0, 0, 43, 41, 1,
+		0, 0, 0, 44, 45, 1, 0, 0, 0, 45, 46, 5, 15, 0, 0, 46, 3, 1, 0, 0, 0, 47,
+		48, 5, 10, 0, 0, 48, 49, 5, 9, 0, 0, 49, 5, 1, 0, 0, 0, 50, 60, 3, 8, 4,
+		0, 51, 55, 3, 8, 4, 0, 52, 53, 3, 10, 5, 0, 53, 54, 5, 15, 0, 0, 54, 56,
+		1, 0, 0, 0, 55, 52, 1, 0, 0, 0, 56, 57, 1, 0, 0, 0, 57, 55, 1, 0, 0, 0,
+		57, 58, 1, 0, 0, 0, 58, 60, 1, 0, 0, 0, 59, 50, 1, 0, 0, 0, 59, 51, 1,
+		0, 0, 0, 60, 7, 1, 0, 0, 0, 61, 62, 5, 14, 0, 0, 62, 65, 5, 15, 0, 0, 63,
+		64, 5, 11, 0, 0, 64, 66, 5, 15, 0, 0, 65, 63, 1, 0, 0, 0, 65, 66, 1, 0,
+		0, 0, 66, 9, 1, 0, 0, 0, 67, 70, 5, 8, 0, 0, 68, 71, 3, 12, 6, 0, 69, 71,
+		3, 14, 7, 0, 70, 68, 1, 0, 0, 0, 70, 69, 1, 0, 0, 0, 71, 11, 1, 0, 0, 0,
+		72, 75, 3, 16, 8, 0, 73, 74, 5, 1, 0, 0, 74, 76, 5, 11, 0, 0, 75, 73, 1,
+		0, 0, 0, 75, 76, 1, 0, 0, 0, 76, 13, 1, 0, 0, 0, 77, 78, 5, 14, 0, 0, 78,
+		79, 5, 1, 0, 0, 79, 80, 3, 18, 9, 0, 80, 84, 5, 1, 0, 0, 81, 82, 5, 6,
+		0, 0, 82, 83, 5, 1, 0, 0, 83, 85, 3, 18, 9, 0, 84, 81, 1, 0, 0, 0, 84,
+		85, 1, 0, 0, 0, 85, 88, 1, 0, 0, 0, 86, 87, 5, 1, 0, 0, 87, 89, 5, 11,
+		0, 0, 88, 86, 1, 0, 0, 0, 88, 89, 1, 0, 0, 0, 89, 15, 1, 0, 0, 0, 90, 91,
+		5, 14, 0, 0, 91, 92, 5, 1, 0, 0, 92, 93, 3, 20, 10, 0, 93, 17, 1, 0, 0,
+		0, 94, 108, 5, 2, 0, 0, 95, 97, 5, 3, 0, 0, 96, 98, 3, 16, 8, 0, 97, 96,
+		1, 0, 0, 0, 97, 98, 1, 0, 0, 0, 98, 103, 1, 0, 0, 0, 99, 100, 5, 1, 0,
+		0, 100, 102, 3, 16, 8, 0, 101, 99, 1, 0, 0, 0, 102, 105, 1, 0, 0, 0, 103,
+		101, 1, 0, 0, 0, 103, 104, 1, 0, 0, 0, 104, 106, 1, 0, 0, 0, 105, 103,
+		1, 0, 0, 0, 106, 108, 5, 4, 0, 0, 107, 94, 1, 0, 0, 0, 107, 95, 1, 0, 0,
+		0, 108, 19, 1, 0, 0, 0, 109, 111, 5, 5, 0, 0, 110, 109, 1, 0, 0, 0, 110,
+		111, 1, 0, 0, 0, 111, 112, 1, 0, 0, 0, 112, 113, 5, 14, 0, 0, 113, 21,
+		1, 0, 0, 0, 15, 23, 30, 39, 43, 57, 59, 65, 70, 75, 84, 88, 97, 103, 107,
+		110,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -111,28 +130,38 @@ func NewDesignLanguageParser(input antlr.TokenStream) *DesignLanguageParser {
 
 // DesignLanguageParser tokens.
 const (
-	DesignLanguageParserEOF      = antlr.TokenEOF
-	DesignLanguageParserT__0     = 1
-	DesignLanguageParserT__1     = 2
-	DesignLanguageParserT__2     = 3
-	DesignLanguageParserT__3     = 4
-	DesignLanguageParserARRAY    = 5
-	DesignLanguageParserNAME     = 6
-	DesignLanguageParserASTERISK = 7
-	DesignLanguageParserARROW    = 8
-	DesignLanguageParserNEWLINE  = 9
+	DesignLanguageParserEOF           = antlr.TokenEOF
+	DesignLanguageParserT__0          = 1
+	DesignLanguageParserT__1          = 2
+	DesignLanguageParserT__2          = 3
+	DesignLanguageParserT__3          = 4
+	DesignLanguageParserARRAY         = 5
+	DesignLanguageParserARROW         = 6
+	DesignLanguageParserASTERISK      = 7
+	DesignLanguageParserFIELD_START   = 8
+	DesignLanguageParserAUTHOR_NAME   = 9
+	DesignLanguageParserAUTHOR_START  = 10
+	DesignLanguageParserCOMMENT       = 11
+	DesignLanguageParserCOMMENT_START = 12
+	DesignLanguageParserCOMMENT_TEXT  = 13
+	DesignLanguageParserNAME          = 14
+	DesignLanguageParserNEWLINE       = 15
+	DesignLanguageParserSPECIAL_CHAR  = 16
 )
 
 // DesignLanguageParser rules.
 const (
-	DesignLanguageParserRULE_design    = 0
-	DesignLanguageParserRULE_component = 1
-	DesignLanguageParserRULE_field     = 2
-	DesignLanguageParserRULE_attribute = 3
-	DesignLanguageParserRULE_method    = 4
-	DesignLanguageParserRULE_param     = 5
-	DesignLanguageParserRULE_params    = 6
-	DesignLanguageParserRULE_type      = 7
+	DesignLanguageParserRULE_design          = 0
+	DesignLanguageParserRULE_preamble        = 1
+	DesignLanguageParserRULE_author          = 2
+	DesignLanguageParserRULE_component       = 3
+	DesignLanguageParserRULE_simpleComponent = 4
+	DesignLanguageParserRULE_field           = 5
+	DesignLanguageParserRULE_attribute       = 6
+	DesignLanguageParserRULE_method          = 7
+	DesignLanguageParserRULE_param           = 8
+	DesignLanguageParserRULE_params          = 9
+	DesignLanguageParserRULE_type            = 10
 )
 
 // IDesignContext is an interface to support dynamic dispatch.
@@ -144,6 +173,7 @@ type IDesignContext interface {
 
 	// Getter signatures
 	EOF() antlr.TerminalNode
+	Preamble() IPreambleContext
 	AllComponent() []IComponentContext
 	Component(i int) IComponentContext
 	AllNEWLINE() []antlr.TerminalNode
@@ -187,6 +217,22 @@ func (s *DesignContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *DesignContext) EOF() antlr.TerminalNode {
 	return s.GetToken(DesignLanguageParserEOF, 0)
+}
+
+func (s *DesignContext) Preamble() IPreambleContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IPreambleContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IPreambleContext)
 }
 
 func (s *DesignContext) AllComponent() []IComponentContext {
@@ -264,7 +310,21 @@ func (p *DesignLanguageParser) Design() (localctx IDesignContext) {
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(22)
+	p.SetState(23)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == DesignLanguageParserAUTHOR_START || _la == DesignLanguageParserCOMMENT {
+		{
+			p.SetState(22)
+			p.Preamble()
+		}
+
+	}
+	p.SetState(30)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -273,19 +333,188 @@ func (p *DesignLanguageParser) Design() (localctx IDesignContext) {
 
 	for _la == DesignLanguageParserNAME {
 		{
-			p.SetState(16)
+			p.SetState(25)
 			p.Component()
 		}
-		p.SetState(18)
+		{
+			p.SetState(26)
+			p.Match(DesignLanguageParserNEWLINE)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+		p.SetState(32)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+	}
+	{
+		p.SetState(33)
+		p.Match(DesignLanguageParserEOF)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IPreambleContext is an interface to support dynamic dispatch.
+type IPreambleContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	AllNEWLINE() []antlr.TerminalNode
+	NEWLINE(i int) antlr.TerminalNode
+	Author() IAuthorContext
+	COMMENT() antlr.TerminalNode
+
+	// IsPreambleContext differentiates from other interfaces.
+	IsPreambleContext()
+}
+
+type PreambleContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyPreambleContext() *PreambleContext {
+	var p = new(PreambleContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DesignLanguageParserRULE_preamble
+	return p
+}
+
+func InitEmptyPreambleContext(p *PreambleContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DesignLanguageParserRULE_preamble
+}
+
+func (*PreambleContext) IsPreambleContext() {}
+
+func NewPreambleContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *PreambleContext {
+	var p = new(PreambleContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = DesignLanguageParserRULE_preamble
+
+	return p
+}
+
+func (s *PreambleContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *PreambleContext) AllNEWLINE() []antlr.TerminalNode {
+	return s.GetTokens(DesignLanguageParserNEWLINE)
+}
+
+func (s *PreambleContext) NEWLINE(i int) antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserNEWLINE, i)
+}
+
+func (s *PreambleContext) Author() IAuthorContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IAuthorContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IAuthorContext)
+}
+
+func (s *PreambleContext) COMMENT() antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserCOMMENT, 0)
+}
+
+func (s *PreambleContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *PreambleContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *PreambleContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(DesignLanguageListener); ok {
+		listenerT.EnterPreamble(s)
+	}
+}
+
+func (s *PreambleContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(DesignLanguageListener); ok {
+		listenerT.ExitPreamble(s)
+	}
+}
+
+func (p *DesignLanguageParser) Preamble() (localctx IPreambleContext) {
+	localctx = NewPreambleContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 2, DesignLanguageParserRULE_preamble)
+	var _la int
+
+	p.EnterOuterAlt(localctx, 1)
+	p.SetState(43)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+
+	switch p.GetTokenStream().LA(1) {
+	case DesignLanguageParserAUTHOR_START:
+		{
+			p.SetState(35)
+			p.Author()
+		}
+		{
+			p.SetState(36)
+			p.Match(DesignLanguageParserNEWLINE)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		p.SetState(39)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		if _la == DesignLanguageParserNEWLINE {
+		if _la == DesignLanguageParserCOMMENT {
 			{
-				p.SetState(17)
+				p.SetState(37)
+				p.Match(DesignLanguageParserCOMMENT)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+			{
+				p.SetState(38)
 				p.Match(DesignLanguageParserNEWLINE)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -295,16 +524,140 @@ func (p *DesignLanguageParser) Design() (localctx IDesignContext) {
 
 		}
 
-		p.SetState(24)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
+	case DesignLanguageParserCOMMENT:
+		{
+			p.SetState(41)
+			p.Match(DesignLanguageParserCOMMENT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
-		_la = p.GetTokenStream().LA(1)
+		{
+			p.SetState(42)
+			p.Match(DesignLanguageParserNEWLINE)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	default:
+		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+		goto errorExit
 	}
 	{
-		p.SetState(25)
-		p.Match(DesignLanguageParserEOF)
+		p.SetState(45)
+		p.Match(DesignLanguageParserNEWLINE)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IAuthorContext is an interface to support dynamic dispatch.
+type IAuthorContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	AUTHOR_START() antlr.TerminalNode
+	AUTHOR_NAME() antlr.TerminalNode
+
+	// IsAuthorContext differentiates from other interfaces.
+	IsAuthorContext()
+}
+
+type AuthorContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyAuthorContext() *AuthorContext {
+	var p = new(AuthorContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DesignLanguageParserRULE_author
+	return p
+}
+
+func InitEmptyAuthorContext(p *AuthorContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DesignLanguageParserRULE_author
+}
+
+func (*AuthorContext) IsAuthorContext() {}
+
+func NewAuthorContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *AuthorContext {
+	var p = new(AuthorContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = DesignLanguageParserRULE_author
+
+	return p
+}
+
+func (s *AuthorContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *AuthorContext) AUTHOR_START() antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserAUTHOR_START, 0)
+}
+
+func (s *AuthorContext) AUTHOR_NAME() antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserAUTHOR_NAME, 0)
+}
+
+func (s *AuthorContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *AuthorContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *AuthorContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(DesignLanguageListener); ok {
+		listenerT.EnterAuthor(s)
+	}
+}
+
+func (s *AuthorContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(DesignLanguageListener); ok {
+		listenerT.ExitAuthor(s)
+	}
+}
+
+func (p *DesignLanguageParser) Author() (localctx IAuthorContext) {
+	localctx = NewAuthorContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 4, DesignLanguageParserRULE_author)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(47)
+		p.Match(DesignLanguageParserAUTHOR_START)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+	{
+		p.SetState(48)
+		p.Match(DesignLanguageParserAUTHOR_NAME)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
@@ -332,10 +685,11 @@ type IComponentContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	NAME() antlr.TerminalNode
-	NEWLINE() antlr.TerminalNode
+	SimpleComponent() ISimpleComponentContext
 	AllField() []IFieldContext
 	Field(i int) IFieldContext
+	AllNEWLINE() []antlr.TerminalNode
+	NEWLINE(i int) antlr.TerminalNode
 
 	// IsComponentContext differentiates from other interfaces.
 	IsComponentContext()
@@ -373,12 +727,20 @@ func NewComponentContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 
 func (s *ComponentContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ComponentContext) NAME() antlr.TerminalNode {
-	return s.GetToken(DesignLanguageParserNAME, 0)
-}
+func (s *ComponentContext) SimpleComponent() ISimpleComponentContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ISimpleComponentContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
 
-func (s *ComponentContext) NEWLINE() antlr.TerminalNode {
-	return s.GetToken(DesignLanguageParserNEWLINE, 0)
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISimpleComponentContext)
 }
 
 func (s *ComponentContext) AllField() []IFieldContext {
@@ -422,6 +784,14 @@ func (s *ComponentContext) Field(i int) IFieldContext {
 	return t.(IFieldContext)
 }
 
+func (s *ComponentContext) AllNEWLINE() []antlr.TerminalNode {
+	return s.GetTokens(DesignLanguageParserNEWLINE)
+}
+
+func (s *ComponentContext) NEWLINE(i int) antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserNEWLINE, i)
+}
+
 func (s *ComponentContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -444,12 +814,168 @@ func (s *ComponentContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *DesignLanguageParser) Component() (localctx IComponentContext) {
 	localctx = NewComponentContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 2, DesignLanguageParserRULE_component)
+	p.EnterRule(localctx, 6, DesignLanguageParserRULE_component)
+	var _la int
+
+	p.SetState(59)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 5, p.GetParserRuleContext()) {
+	case 1:
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(50)
+			p.SimpleComponent()
+		}
+
+	case 2:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(51)
+			p.SimpleComponent()
+		}
+		p.SetState(55)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		for ok := true; ok; ok = _la == DesignLanguageParserFIELD_START {
+			{
+				p.SetState(52)
+				p.Field()
+			}
+			{
+				p.SetState(53)
+				p.Match(DesignLanguageParserNEWLINE)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+			p.SetState(57)
+			p.GetErrorHandler().Sync(p)
+			if p.HasError() {
+				goto errorExit
+			}
+			_la = p.GetTokenStream().LA(1)
+		}
+
+	case antlr.ATNInvalidAltNumber:
+		goto errorExit
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// ISimpleComponentContext is an interface to support dynamic dispatch.
+type ISimpleComponentContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	NAME() antlr.TerminalNode
+	AllNEWLINE() []antlr.TerminalNode
+	NEWLINE(i int) antlr.TerminalNode
+	COMMENT() antlr.TerminalNode
+
+	// IsSimpleComponentContext differentiates from other interfaces.
+	IsSimpleComponentContext()
+}
+
+type SimpleComponentContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptySimpleComponentContext() *SimpleComponentContext {
+	var p = new(SimpleComponentContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DesignLanguageParserRULE_simpleComponent
+	return p
+}
+
+func InitEmptySimpleComponentContext(p *SimpleComponentContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = DesignLanguageParserRULE_simpleComponent
+}
+
+func (*SimpleComponentContext) IsSimpleComponentContext() {}
+
+func NewSimpleComponentContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *SimpleComponentContext {
+	var p = new(SimpleComponentContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = DesignLanguageParserRULE_simpleComponent
+
+	return p
+}
+
+func (s *SimpleComponentContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *SimpleComponentContext) NAME() antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserNAME, 0)
+}
+
+func (s *SimpleComponentContext) AllNEWLINE() []antlr.TerminalNode {
+	return s.GetTokens(DesignLanguageParserNEWLINE)
+}
+
+func (s *SimpleComponentContext) NEWLINE(i int) antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserNEWLINE, i)
+}
+
+func (s *SimpleComponentContext) COMMENT() antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserCOMMENT, 0)
+}
+
+func (s *SimpleComponentContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SimpleComponentContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *SimpleComponentContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(DesignLanguageListener); ok {
+		listenerT.EnterSimpleComponent(s)
+	}
+}
+
+func (s *SimpleComponentContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(DesignLanguageListener); ok {
+		listenerT.ExitSimpleComponent(s)
+	}
+}
+
+func (p *DesignLanguageParser) SimpleComponent() (localctx ISimpleComponentContext) {
+	localctx = NewSimpleComponentContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 8, DesignLanguageParserRULE_simpleComponent)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(27)
+		p.SetState(61)
 		p.Match(DesignLanguageParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -457,32 +983,38 @@ func (p *DesignLanguageParser) Component() (localctx IComponentContext) {
 		}
 	}
 	{
-		p.SetState(28)
+		p.SetState(62)
 		p.Match(DesignLanguageParserNEWLINE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(32)
+	p.SetState(65)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == DesignLanguageParserASTERISK {
+	if _la == DesignLanguageParserCOMMENT {
 		{
-			p.SetState(29)
-			p.Field()
+			p.SetState(63)
+			p.Match(DesignLanguageParserCOMMENT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(64)
+			p.Match(DesignLanguageParserNEWLINE)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
-		p.SetState(34)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
 	}
 
 errorExit:
@@ -506,6 +1038,7 @@ type IFieldContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
+	FIELD_START() antlr.TerminalNode
 	Attribute() IAttributeContext
 	Method() IMethodContext
 
@@ -544,6 +1077,10 @@ func NewFieldContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 }
 
 func (s *FieldContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *FieldContext) FIELD_START() antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserFIELD_START, 0)
+}
 
 func (s *FieldContext) Attribute() IAttributeContext {
 	var t antlr.RuleContext
@@ -599,25 +1136,32 @@ func (s *FieldContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *DesignLanguageParser) Field() (localctx IFieldContext) {
 	localctx = NewFieldContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, DesignLanguageParserRULE_field)
-	p.SetState(37)
+	p.EnterRule(localctx, 10, DesignLanguageParserRULE_field)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(67)
+		p.Match(DesignLanguageParserFIELD_START)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+	p.SetState(70)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 3, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 7, p.GetParserRuleContext()) {
 	case 1:
-		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(35)
+			p.SetState(68)
 			p.Attribute()
 		}
 
 	case 2:
-		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(36)
+			p.SetState(69)
 			p.Method()
 		}
 
@@ -646,9 +1190,8 @@ type IAttributeContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	ASTERISK() antlr.TerminalNode
 	Param() IParamContext
-	NEWLINE() antlr.TerminalNode
+	COMMENT() antlr.TerminalNode
 
 	// IsAttributeContext differentiates from other interfaces.
 	IsAttributeContext()
@@ -686,10 +1229,6 @@ func NewAttributeContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 
 func (s *AttributeContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *AttributeContext) ASTERISK() antlr.TerminalNode {
-	return s.GetToken(DesignLanguageParserASTERISK, 0)
-}
-
 func (s *AttributeContext) Param() IParamContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
@@ -706,8 +1245,8 @@ func (s *AttributeContext) Param() IParamContext {
 	return t.(IParamContext)
 }
 
-func (s *AttributeContext) NEWLINE() antlr.TerminalNode {
-	return s.GetToken(DesignLanguageParserNEWLINE, 0)
+func (s *AttributeContext) COMMENT() antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserCOMMENT, 0)
 }
 
 func (s *AttributeContext) GetRuleContext() antlr.RuleContext {
@@ -732,35 +1271,39 @@ func (s *AttributeContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *DesignLanguageParser) Attribute() (localctx IAttributeContext) {
 	localctx = NewAttributeContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, DesignLanguageParserRULE_attribute)
+	p.EnterRule(localctx, 12, DesignLanguageParserRULE_attribute)
+	var _la int
+
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(39)
-		p.Match(DesignLanguageParserASTERISK)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(40)
-		p.Match(DesignLanguageParserT__0)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(41)
+		p.SetState(72)
 		p.Param()
 	}
-	{
-		p.SetState(42)
-		p.Match(DesignLanguageParserNEWLINE)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
+	p.SetState(75)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == DesignLanguageParserT__0 {
+		{
+			p.SetState(73)
+			p.Match(DesignLanguageParserT__0)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
+		{
+			p.SetState(74)
+			p.Match(DesignLanguageParserCOMMENT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
 	}
 
 errorExit:
@@ -784,12 +1327,11 @@ type IMethodContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	ASTERISK() antlr.TerminalNode
 	NAME() antlr.TerminalNode
 	AllParams() []IParamsContext
 	Params(i int) IParamsContext
 	ARROW() antlr.TerminalNode
-	NEWLINE() antlr.TerminalNode
+	COMMENT() antlr.TerminalNode
 
 	// IsMethodContext differentiates from other interfaces.
 	IsMethodContext()
@@ -826,10 +1368,6 @@ func NewMethodContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 }
 
 func (s *MethodContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *MethodContext) ASTERISK() antlr.TerminalNode {
-	return s.GetToken(DesignLanguageParserASTERISK, 0)
-}
 
 func (s *MethodContext) NAME() antlr.TerminalNode {
 	return s.GetToken(DesignLanguageParserNAME, 0)
@@ -880,8 +1418,8 @@ func (s *MethodContext) ARROW() antlr.TerminalNode {
 	return s.GetToken(DesignLanguageParserARROW, 0)
 }
 
-func (s *MethodContext) NEWLINE() antlr.TerminalNode {
-	return s.GetToken(DesignLanguageParserNEWLINE, 0)
+func (s *MethodContext) COMMENT() antlr.TerminalNode {
+	return s.GetToken(DesignLanguageParserCOMMENT, 0)
 }
 
 func (s *MethodContext) GetRuleContext() antlr.RuleContext {
@@ -906,26 +1444,12 @@ func (s *MethodContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *DesignLanguageParser) Method() (localctx IMethodContext) {
 	localctx = NewMethodContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, DesignLanguageParserRULE_method)
+	p.EnterRule(localctx, 14, DesignLanguageParserRULE_method)
+	var _la int
+
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(44)
-		p.Match(DesignLanguageParserASTERISK)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(45)
-		p.Match(DesignLanguageParserT__0)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
-	}
-	{
-		p.SetState(46)
+		p.SetState(77)
 		p.Match(DesignLanguageParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -933,7 +1457,7 @@ func (p *DesignLanguageParser) Method() (localctx IMethodContext) {
 		}
 	}
 	{
-		p.SetState(47)
+		p.SetState(78)
 		p.Match(DesignLanguageParserT__0)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -941,44 +1465,72 @@ func (p *DesignLanguageParser) Method() (localctx IMethodContext) {
 		}
 	}
 	{
-		p.SetState(48)
+		p.SetState(79)
 		p.Params()
 	}
 	{
-		p.SetState(49)
+		p.SetState(80)
 		p.Match(DesignLanguageParserT__0)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	{
-		p.SetState(50)
-		p.Match(DesignLanguageParserARROW)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
-		}
+	p.SetState(84)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
 	}
-	{
-		p.SetState(51)
-		p.Match(DesignLanguageParserT__0)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == DesignLanguageParserARROW {
+		{
+			p.SetState(81)
+			p.Match(DesignLanguageParserARROW)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
-	}
-	{
-		p.SetState(52)
-		p.Params()
-	}
-	{
-		p.SetState(53)
-		p.Match(DesignLanguageParserNEWLINE)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
+		{
+			p.SetState(82)
+			p.Match(DesignLanguageParserT__0)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
+		{
+			p.SetState(83)
+			p.Params()
+		}
+
+	}
+	p.SetState(88)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == DesignLanguageParserT__0 {
+		{
+			p.SetState(86)
+			p.Match(DesignLanguageParserT__0)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(87)
+			p.Match(DesignLanguageParserCOMMENT)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
 	}
 
 errorExit:
@@ -1083,10 +1635,10 @@ func (s *ParamContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *DesignLanguageParser) Param() (localctx IParamContext) {
 	localctx = NewParamContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, DesignLanguageParserRULE_param)
+	p.EnterRule(localctx, 16, DesignLanguageParserRULE_param)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(55)
+		p.SetState(90)
 		p.Match(DesignLanguageParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1094,7 +1646,7 @@ func (p *DesignLanguageParser) Param() (localctx IParamContext) {
 		}
 	}
 	{
-		p.SetState(56)
+		p.SetState(91)
 		p.Match(DesignLanguageParserT__0)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1102,7 +1654,7 @@ func (p *DesignLanguageParser) Param() (localctx IParamContext) {
 		}
 	}
 	{
-		p.SetState(57)
+		p.SetState(92)
 		p.Type_()
 	}
 
@@ -1229,10 +1781,10 @@ func (s *ParamsContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *DesignLanguageParser) Params() (localctx IParamsContext) {
 	localctx = NewParamsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, DesignLanguageParserRULE_params)
+	p.EnterRule(localctx, 18, DesignLanguageParserRULE_params)
 	var _la int
 
-	p.SetState(72)
+	p.SetState(107)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1242,7 +1794,7 @@ func (p *DesignLanguageParser) Params() (localctx IParamsContext) {
 	case DesignLanguageParserT__1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(59)
+			p.SetState(94)
 			p.Match(DesignLanguageParserT__1)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1253,14 +1805,14 @@ func (p *DesignLanguageParser) Params() (localctx IParamsContext) {
 	case DesignLanguageParserT__2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(60)
+			p.SetState(95)
 			p.Match(DesignLanguageParserT__2)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(62)
+		p.SetState(97)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1269,12 +1821,12 @@ func (p *DesignLanguageParser) Params() (localctx IParamsContext) {
 
 		if _la == DesignLanguageParserNAME {
 			{
-				p.SetState(61)
+				p.SetState(96)
 				p.Param()
 			}
 
 		}
-		p.SetState(68)
+		p.SetState(103)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1283,7 +1835,7 @@ func (p *DesignLanguageParser) Params() (localctx IParamsContext) {
 
 		for _la == DesignLanguageParserT__0 {
 			{
-				p.SetState(64)
+				p.SetState(99)
 				p.Match(DesignLanguageParserT__0)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1291,11 +1843,11 @@ func (p *DesignLanguageParser) Params() (localctx IParamsContext) {
 				}
 			}
 			{
-				p.SetState(65)
+				p.SetState(100)
 				p.Param()
 			}
 
-			p.SetState(70)
+			p.SetState(105)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
@@ -1303,7 +1855,7 @@ func (p *DesignLanguageParser) Params() (localctx IParamsContext) {
 			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(71)
+			p.SetState(106)
 			p.Match(DesignLanguageParserT__3)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1406,11 +1958,11 @@ func (s *TypeContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *DesignLanguageParser) Type_() (localctx ITypeContext) {
 	localctx = NewTypeContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, DesignLanguageParserRULE_type)
+	p.EnterRule(localctx, 20, DesignLanguageParserRULE_type)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(75)
+	p.SetState(110)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1419,7 +1971,7 @@ func (p *DesignLanguageParser) Type_() (localctx ITypeContext) {
 
 	if _la == DesignLanguageParserARRAY {
 		{
-			p.SetState(74)
+			p.SetState(109)
 			p.Match(DesignLanguageParserARRAY)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1429,7 +1981,7 @@ func (p *DesignLanguageParser) Type_() (localctx ITypeContext) {
 
 	}
 	{
-		p.SetState(77)
+		p.SetState(112)
 		p.Match(DesignLanguageParserNAME)
 		if p.HasError() {
 			// Recognition error - abort rule

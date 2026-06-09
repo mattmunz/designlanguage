@@ -8,29 +8,29 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var plane = gen.NewComponent("Plane")
+var plane = model.NewComponent("Plane", "")
 
 var rectangle = model.NewEntity(
-	"Rectangle", []model.Attribute{model.NewAttribute("Length", "int", false), model.NewAttribute("Width", "int", false)},
+	"Rectangle", "", []model.Attribute{model.NewAttribute("Length", "", "int", false), model.NewAttribute("Width", "", "int", false)},
 )
 
 var labelledValue = model.NewEntity(
-	"LabelledValue", []model.Attribute{model.NewAttribute("Label", "String", false), model.NewAttribute("Value", "Int", false)},
+	"LabelledValue", "", []model.Attribute{model.NewAttribute("Label", "", "String", false), model.NewAttribute("Value", "", "Int", false)},
 )
 
 var personRepo = model.NewObject(
-	"PersonRepository", []model.Attribute{},
+	"PersonRepository", "", []model.Attribute{},
 	[]model.Method{
-		model.NewMethod("Add", []model.Param{model.NewParam("Person", model.NewType("Person", false))}, []model.Param{}),
-		model.NewMethod("Get",
+		model.NewMethod("Add", "", []model.Param{model.NewParam("Person", model.NewType("Person", false))}, []model.Param{}),
+		model.NewMethod("Get", "",
 			[]model.Param{model.NewParam("name", model.NewType("String", false))},
 			[]model.Param{model.NewParam("person", model.NewType("Person", false))}),
 	})
 
-func TestRenderDesign(t *testing.T) {
+func TestRenderDesignSummary(t *testing.T) {
 	spinner := newSpinner()
 
-	design := model.NewDesign(
+	design := model.NewDesign("", "",
 		"Geometry", []model.Component{plane, rectangle, spinner}, []model.Entity{rectangle}, []model.Object{spinner},
 	)
 
@@ -42,13 +42,13 @@ func TestRenderDesign(t *testing.T) {
 func newSpinner() model.Object {
 	intType := model.NewType("int", false)
 
-	method := []model.Method{model.NewMethod("Spin",
+	method := []model.Method{model.NewMethod("Spin", "",
 		[]model.Param{model.NewParam("velocity", intType), model.NewParam("duration", intType)},
 		[]model.Param{}),
 	}
 
 	return model.NewObject(
-		"Spinner", []model.Attribute{model.NewAttribute("Radius", "int", false)},
+		"Spinner", "", []model.Attribute{model.NewAttribute("Radius", "", "int", false)},
 		method,
 	)
 }
@@ -112,7 +112,7 @@ func TestRenderPersonRepository(t *testing.T) {
 	require.Equal(t, expectedSource, src)
 }
 
-func TestRenderDesignSource(t *testing.T) {
+func TestRenderDesignSourceGeometry(t *testing.T) {
 	expectedSource := `package geometry
 
 type Plane interface{}
@@ -130,10 +130,22 @@ type Spinner interface {
 	spinner := newSpinner()
 
 	design := model.NewDesign(
-		"geometry", []model.Component{plane, rectangle, spinner}, []model.Entity{rectangle}, []model.Object{spinner},
+		"geometry", "", "", []model.Component{plane, rectangle, spinner}, []model.Entity{rectangle}, []model.Object{spinner},
 	)
 
 	src, err := gen.RenderDesignSource(design)
 	require.NoError(t, err)
 	require.Equal(t, expectedSource, src)
+}
+
+// TODO Make sure the following ends up in the source code for the appkit example
+// See the above. Break out unit tests as needed
+// TODO Test author
+// TODO Test package documentation
+// TODO Test inline documentation
+// TODO Test method with no arrow
+// TODO Test Logger mapper
+// TODO Test commandImpl mapper
+func TestRenderDesignSourceAppkit(t *testing.T) {
+	require.Fail(t, "NYI")
 }

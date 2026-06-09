@@ -1,0 +1,31 @@
+package parser
+
+import (
+	"io"
+	"os"
+
+	"github.com/mattmunz/designlanguage/model"
+)
+
+type Parser interface {
+	Parse(path, namespace string) (model.Design, error)
+}
+
+func NewParser() Parser {
+	// TODO Impl single-pass custom parser
+	return NewANTLRParser()
+}
+
+func readFile(path string) ([]byte, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+	return content, nil
+}

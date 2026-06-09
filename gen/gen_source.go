@@ -17,6 +17,7 @@ import (
 
 	"github.com/mattmunz/appkit/misc"
 	"github.com/mattmunz/designlanguage/model"
+	"github.com/mattmunz/designlanguage/parser"
 )
 
 var goTypeByDLType = map[string]string{
@@ -175,18 +176,6 @@ func render(statement *jen.Statement) (string, error) {
 	return string(src), err
 }
 
-type ComponentImpl struct {
-	name string
-}
-
-func (c *ComponentImpl) Name() string {
-	return c.name
-}
-
-func NewComponent(name string) model.Component {
-	return &ComponentImpl{name}
-}
-
 func GenerateSourceForDL(projectDir string, logger klog.Logger, dryRun bool) error {
 	projectDirPath, err := filepath.Abs(projectDir)
 	if err != nil {
@@ -207,12 +196,14 @@ func GenerateSourceForDL(projectDir string, logger klog.Logger, dryRun bool) err
 
 	misc.LogMessage(logger, fmt.Sprintf("Walking the path %q", designPath))
 
+	designParser := parser.NewParser()
+
 	err = filepath.Walk(designPath, func(path string, info fs.FileInfo, err error) error {
 		if !strings.HasSuffix(path, ".nzsd.txt") {
 			return nil
 		}
 
-		return HandleDLMFile(logger, parsedDesigns, designPath, path, info, dryRun, projectDirPath, err)
+		return HandleDLMFile(logger, designParser, parsedDesigns, designPath, path, info, dryRun, projectDirPath, err)
 	})
 
 	if err != nil {

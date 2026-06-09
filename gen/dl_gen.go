@@ -10,6 +10,7 @@ import (
 
 	"github.com/mattmunz/appkit/misc"
 	"github.com/mattmunz/designlanguage/model"
+	"github.com/mattmunz/designlanguage/parser"
 )
 
 type DesignList struct {
@@ -31,7 +32,7 @@ func (d *DesignList) All() []model.Design {
 // Collect all design objects from design files.
 // designPath is root dir of designs.
 // path is the path to the specific design file being parsed.
-func HandleDLMFile(logger klog.Logger, parsedDesigns *DesignList, designPath, path string, info fs.FileInfo, dryRun bool, outputPath string,
+func HandleDLMFile(logger klog.Logger, designParser parser.Parser, parsedDesigns *DesignList, designPath, path string, info fs.FileInfo, dryRun bool, outputPath string,
 	err error) error {
 	if err != nil {
 		return err
@@ -44,7 +45,7 @@ func HandleDLMFile(logger klog.Logger, parsedDesigns *DesignList, designPath, pa
 
 	misc.LogMessage(logger, fmt.Sprintf("Parsing design (%s) / (%s)...", designPath, path))
 
-	design, err := model.Parse(path, namespace)
+	design, err := designParser.Parse(path, namespace)
 	if err != nil {
 		return err
 	}

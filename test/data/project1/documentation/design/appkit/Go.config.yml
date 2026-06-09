@@ -1,0 +1,5 @@
+types:
+  mappings: {
+    "Logger": "github.com/go-kit/kit/log.Logger",
+    "CommandImpl": "*github.com/spf13/cobra.Command",
+  }

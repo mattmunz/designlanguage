@@ -1,0 +1,23 @@
+-- Author: Nonzero Sum
+-- Appkit is an application development kit, part of the Nonzero Sum Stack.
+
+App
+-- A software application.
+* ID String
+* Version String -- Semver preferred.
+* ConfigName String
+
+Command 
+* Execute ()
+
+CLI :: Command
+-- Command Line Interface.
+* AppID String
+* Name String
+* ShortDescription String
+* NewRootCommand (Cmd CommandImpl, Err error)
+* SetLogger(Logger Logger)
+
+CommandFactory
+* New () -> (Cmd CommandImpl)
+

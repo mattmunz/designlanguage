@@ -10,8 +10,17 @@ type DesignLanguageListener interface {
 	// EnterDesign is called when entering the design production.
 	EnterDesign(c *DesignContext)
 
+	// EnterPreamble is called when entering the preamble production.
+	EnterPreamble(c *PreambleContext)
+
+	// EnterAuthor is called when entering the author production.
+	EnterAuthor(c *AuthorContext)
+
 	// EnterComponent is called when entering the component production.
 	EnterComponent(c *ComponentContext)
+
+	// EnterSimpleComponent is called when entering the simpleComponent production.
+	EnterSimpleComponent(c *SimpleComponentContext)
 
 	// EnterField is called when entering the field production.
 	EnterField(c *FieldContext)
@@ -34,8 +43,17 @@ type DesignLanguageListener interface {
 	// ExitDesign is called when exiting the design production.
 	ExitDesign(c *DesignContext)
 
+	// ExitPreamble is called when exiting the preamble production.
+	ExitPreamble(c *PreambleContext)
+
+	// ExitAuthor is called when exiting the author production.
+	ExitAuthor(c *AuthorContext)
+
 	// ExitComponent is called when exiting the component production.
 	ExitComponent(c *ComponentContext)
+
+	// ExitSimpleComponent is called when exiting the simpleComponent production.
+	ExitSimpleComponent(c *SimpleComponentContext)
 
 	// ExitField is called when exiting the field production.
 	ExitField(c *FieldContext)

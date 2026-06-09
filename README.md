@@ -3,11 +3,13 @@ Nonzero Sum Design Language definition and tools
 
 ## TODO
 
+* ANTLR parser no longer worth the trouble. 
+  * Make a single-pass parser, line by line, with context
 * NZS design tools -- A set of tools for working with the NZS design language
-  * Move appkit to its own repository, and later rework sundries to use it.
-  * Use it for an existing project -- generate model interfaces
+  * Use it for an existing project -- appkit -- generate model interfaces
+    * Implement all the appkit syntax. TDD
   * Add inline documentation in the source file ending up in the output source code
-    * doc of type in first line of body
+    * comment of type in first line of body
     * comments after -- mark on line
     * Document comment including author attribution
   * Make documentation: How To, Getting started, Contriubuting, etc.
@@ -18,6 +20,8 @@ Nonzero Sum Design Language definition and tools
 
 ## Done
 
+* Make a parser interface
+* Move appkit to its own repository, and later rework sundries to use it.
 * X Make an ANTLR grammar file
 * X Generate a Go parser
 * X Make a simple test and get it to work
