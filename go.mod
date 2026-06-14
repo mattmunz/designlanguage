@@ -2,14 +2,16 @@ module github.com/mattmunz/designlanguage
 
 go 1.23.5
 
-require github.com/go-kit/kit v0.13.0
+require (
+	github.com/go-kit/kit v0.13.0
+	github.com/mattmunz/appkit v0.0.0-20260614213526-8e8fa738257e
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/mattmunz/appkit v0.0.0-20260608003740-219793067520 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sagikazarmark/locafero v0.11.0 // indirect
@@ -32,6 +34,6 @@ require (
 	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.10.2
-	github.com/spf13/viper v1.21.0
+	github.com/spf13/viper v1.21.0 // indirect
 	github.com/stretchr/testify v1.11.1
 )

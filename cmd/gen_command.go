@@ -6,11 +6,11 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/mattmunz/appkit/cmd"
-	"github.com/mattmunz/appkit/model"
+	gmodel "github.com/mattmunz/appkit/model/gen/appkit"
 	"github.com/mattmunz/designlanguage/gen"
 )
 
-func newGenCmd(cli model.CLI) *cobra.Command {
+func newGenCmd(cli gmodel.CLI) *cobra.Command {
 	genCmd := &cobra.Command{
 		Use:   "gen",
 		Short: "Generate model source code from Design Language Model files.",
@@ -21,7 +21,7 @@ func newGenCmd(cli model.CLI) *cobra.Command {
 	projectDirFlag := genCmd.Flags().StringP("projectDir", "p", "",
 		"Path to the project directory.")
 
-	doDLM1 := func(cli model.CLI, cmd *cobra.Command, args []string) error {
+	doDLM1 := func(cli gmodel.CLI, cmd *cobra.Command, args []string) error {
 		return doGen(cli.Logger(), cmd, args, *dryRunFlag, *projectDirFlag)
 	}
 	genCmd.Run = cmd.WrapRunner(doDLM1, cli)
