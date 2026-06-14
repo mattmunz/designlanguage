@@ -12,8 +12,10 @@ type Parser interface {
 }
 
 func NewParser() Parser {
-	// TODO Impl single-pass custom parser
-	return NewANTLRParser()
+	// TODO This got too complicated. Get an ANTLR expert to fix this.
+	// return NewANTLRParser()
+
+	return NewSinglePassParser()
 }
 
 func readFile(path string) ([]byte, error) {

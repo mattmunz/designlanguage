@@ -42,5 +42,5 @@ func doGen(logger klog.Logger, cmd *cobra.Command, args []string, dryRun bool, p
 		return err
 	}
 
-	return gen.GenerateSourceForDL(projectDir, logger, dryRun)
+	return gen.GenerateGoSourceForDL(projectDir, logger, dryRun)
 }
