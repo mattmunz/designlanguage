@@ -1,11 +1,17 @@
 package model
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Design interface {
 	Commented
 
 	Author() string
 	Namespace() string
-	Components() []Component
+	AllComponents() []Component
+	BaseComponents() []Component
 	Entities() []Entity
 	Objects() []Object
 }
@@ -61,18 +67,38 @@ type Type interface {
 type Component interface {
 	Named
 	Commented
+	Supertype() string
 }
 
 type component struct {
 	Named
 	Commented
+	supertype string
 }
 
-func NewComponent(name, comment string) Component {
+// TODO Validate all strings more stringently for validity
+func NewComponent(name, comment, supertype string) (Component, error) {
+	if strings.Contains(name, " ") {
+		return nil, fmt.Errorf("Invalid name: [%s]", name)
+	}
+
+	if strings.HasSuffix(comment, " ") {
+		return nil, fmt.Errorf("Invalid comment: [%s]", comment)
+	}
+
+	if strings.Contains(supertype, " ") {
+		return nil, fmt.Errorf("Invalid supertype: [%s]", supertype)
+	}
+
 	return &component{
 		newNamed(name),
 		newCommented(comment),
-	}
+		supertype,
+	}, nil
+}
+
+func (c *component) Supertype() string {
+	return c.supertype
 }
 
 // Attribute is the named part of an interface, designating a sub-component.
@@ -110,11 +136,13 @@ type Representation interface {
 	Decode(encoded string) (Entity, error)
 }
 
-func NewObject(name, comment string, attributes []Attribute, methods []Method) Object {
-	return &object{
-		NewEntity(name, comment, attributes),
-		methods,
+func NewObject(name, comment, superType string, attributes []Attribute, methods []Method) (Object, error) {
+	e, err := NewEntity(name, comment, superType, attributes)
+	if err != nil {
+		return nil, err
 	}
+
+	return &object{e, methods}, nil
 }
 
 type object struct {
@@ -126,8 +154,12 @@ func (o *object) Methods() []Method {
 	return o.methods
 }
 
-func NewEntity(name, comment string, attributes []Attribute) Entity {
-	return &entity{NewComponent(name, comment), attributes}
+func NewEntity(name, comment, supertype string, attributes []Attribute) (Entity, error) {
+	c, err := NewComponent(name, comment, supertype)
+	if err != nil {
+		return nil, err
+	}
+	return &entity{c, attributes}, nil
 }
 
 type entity struct {
@@ -154,11 +186,12 @@ func newCommented(commentText string) Commented {
 // design is a concrete implementation of the Design interface
 type design struct {
 	Commented
-	author     string
-	namespace  string
-	components []Component
-	entities   []Entity
-	objects    []Object
+	author         string
+	namespace      string
+	allComponents  []Component
+	baseComponents []Component
+	entities       []Entity
+	objects        []Object
 }
 
 func (d *design) Author() string {
@@ -169,10 +202,13 @@ func (d *design) Namespace() string {
 	return d.namespace
 }
 
-func (d *design) Components() []Component {
-	return d.components
+func (d *design) AllComponents() []Component {
+	return d.allComponents
 }
 
+func (d *design) BaseComponents() []Component {
+	return d.baseComponents
+}
 func (d *design) Entities() []Entity {
 	return d.entities
 }
@@ -181,14 +217,15 @@ func (d *design) Objects() []Object {
 	return d.objects
 }
 
-func NewDesign(author, comment, namespace string, components []Component, entities []Entity, objects []Object) Design {
+func NewDesign(author, comment, namespace string, allComponents []Component) Design {
 	return &design{
 		newCommented(comment),
 		author,
 		namespace,
-		components,
-		entities,
-		objects,
+		allComponents,
+		GetBaseComponents(allComponents),
+		GetEntities(allComponents),
+		GetObjects(allComponents),
 	}
 }
 
@@ -234,7 +271,8 @@ func NewType(name string, isArray bool) Type {
 
 // method is a concrete implementation of the Method interface
 type method struct {
-	Component
+	Named
+	Commented
 	params     []Param
 	returnVals []Param
 }
@@ -247,10 +285,59 @@ func (m *method) ReturnVals() []Param {
 	return m.returnVals
 }
 
-func NewMethod(name, comment string, params, returnVals []Param) Method {
+func NewMethod(name, comment string, params, returnVals []Param) (Method, error) {
+	// TODO Refactor together validations
+	if strings.Contains(name, " ") {
+		return nil, fmt.Errorf("Invalid method name: [%s]", name)
+	}
+
+	if strings.HasSuffix(comment, " ") {
+		return nil, fmt.Errorf("Invalid comment: [%s]", comment)
+	}
+
 	return &method{
-		NewComponent(name, comment),
+		newNamed(name),
+		newCommented(comment),
 		params,
 		returnVals,
+	}, nil
+}
+
+func GetEntities(components []Component) []Entity {
+	entities := []Entity{}
+	for _, component := range components {
+		if _, ok := component.(Object); ok {
+			continue
+		}
+
+		if e, ok := component.(Entity); ok {
+			entities = append(entities, e)
+		}
 	}
+	return entities
+}
+
+func GetObjects(components []Component) []Object {
+	objects := []Object{}
+	for _, component := range components {
+		if e, ok := component.(Object); ok {
+			objects = append(objects, e)
+		}
+	}
+	return objects
+}
+
+func GetBaseComponents(components []Component) []Component {
+	filteredComponents := []Component{}
+	for _, component := range components {
+		switch t := component.(type) {
+		case Object:
+			continue
+		case Entity:
+			continue
+		default:
+			filteredComponents = append(filteredComponents, t)
+		}
+	}
+	return filteredComponents
 }

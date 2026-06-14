@@ -42,16 +42,17 @@ func (*antlrParser) Parse(path, namespace string) (model.Design, error) {
 	}
 
 	for _, cc := range design.AllComponent() {
-		objects, components, entities, err = addComponent(cc, objects, components, entities)
+		// TODO This is now wrong.
+		objects, components, entities, err = addComponentANTLR(cc, objects, components, entities)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return model.NewDesign(author, comment, namespace, components, entities, objects), nil
+	return model.NewDesign(author, comment, namespace, components), nil
 }
 
-func addComponent(cc p.IComponentContext, objects []model.Object, components []model.Component, entities []model.Entity) ([]model.Object, []model.Component, []model.Entity, error) {
+func addComponentANTLR(cc p.IComponentContext, objects []model.Object, components []model.Component, entities []model.Entity) ([]model.Object, []model.Component, []model.Entity, error) {
 	name := cc.SimpleComponent().NAME().GetText()
 	objComment := ""
 	comment := cc.SimpleComponent().COMMENT()
@@ -86,11 +87,17 @@ func addComponent(cc p.IComponentContext, objects []model.Object, components []m
 	}
 
 	if len(methods) > 0 {
-		obj := model.NewObject(name, objComment, attributes, methods)
+		obj, err := model.NewObject(name, objComment, "", attributes, methods)
+		if err != nil {
+			return nil, nil, nil, err
+		}
 		objects = append(objects, obj)
 		components = append(components, obj)
 	} else {
-		ent := model.NewEntity(name, objComment, attributes)
+		ent, err := model.NewEntity(name, objComment, "", attributes)
+		if err != nil {
+			return nil, nil, nil, err
+		}
 		entities = append(entities, ent)
 		components = append(components, ent)
 	}
@@ -129,7 +136,11 @@ func addMethod(method p.IMethodContext, methods []model.Method) ([]model.Method,
 	methodComment := ""
 	panic("NYI methodComment")
 
-	return append(methods, model.NewMethod(methodName, methodComment, param1, param2)), nil
+	newMethod, err := model.NewMethod(methodName, methodComment, param1, param2)
+	if err != nil {
+		return nil, err
+	}
+	return append(methods, newMethod), nil
 }
 
 func GetParams(params p.IParamsContext) ([]model.Param, error) {

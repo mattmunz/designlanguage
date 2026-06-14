@@ -6,7 +6,7 @@ Console
 
 CommandHandler
 * Description String
-* Interpet (Command String) -> (Response String)
+* Interpret (Command String) -> (Response String)
 * GetConfigs (Time DateTime) -> (Configs []String)
 
 Browser

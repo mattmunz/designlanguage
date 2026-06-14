@@ -21,7 +21,7 @@ gen() {
 test() {
   DATA_PATH="$(realpath ./test/data)"
 
-  TEST_DATA_PATH=$DATA_PATH go test -test.v ./test/unit/...
+  TEST_DATA_PATH=$DATA_PATH go test  ./test/unit/... # -test.v -run ^TestLoad1$
 }
 
 case $1 in

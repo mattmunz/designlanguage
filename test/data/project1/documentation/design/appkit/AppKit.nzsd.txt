@@ -7,7 +7,7 @@ App
 * Version String -- Semver preferred.
 * ConfigName String
 
-Command 
+Command
 * Execute ()
 
 CLI :: Command
@@ -15,9 +15,8 @@ CLI :: Command
 * AppID String
 * Name String
 * ShortDescription String
-* NewRootCommand (Cmd CommandImpl, Err error)
-* SetLogger(Logger Logger)
+* NewRootCommand () -> (Cmd CommandImpl, Err error)
+* SetLogger (Logger Logger)
 
 CommandFactory
 * New () -> (Cmd CommandImpl)
-
