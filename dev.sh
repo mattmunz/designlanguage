@@ -24,6 +24,10 @@ test() {
   TEST_DATA_PATH=$DATA_PATH go test  ./test/unit/... # -test.v -run ^TestLoad1$
 }
 
+testGen() {
+  designlanguage --help
+}
+
 case $1 in
   b  | build) go install ./cmd/designlanguage/designlanguage.go;;
   f  | format) go fmt ./*;;  
@@ -31,5 +35,6 @@ case $1 in
   h  | help)  echo "build|gen (antlr)|help|test|test_functional";;
   t  | test)  test;;
   tf | test_functional)  go test ./test/functional/...;;
+  tg | test_gen) testGen;;
   *) echo "Unknown argument";;
 esac

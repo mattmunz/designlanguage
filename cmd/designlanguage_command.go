@@ -4,32 +4,50 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/mattmunz/appkit"
-	"github.com/mattmunz/appkit/model"
+	model "github.com/mattmunz/appkit/model"
+	gmodel "github.com/mattmunz/appkit/model/gen/appkit"
 )
 
-var (
-	cli = &dlCLI{
-		appkit.NewCLI(
-			model.NewApp("designlanguage", "1.0.0", ".sundries"),
-			"designlanguage",
-			"Tools for the Nonzero Sum Design Language.",
-		)}
-)
+const version = "1.1.1"
 
-type dlCLI struct {
-	model.CLI
+var cli = newCLI()
+
+func newCLI() gmodel.CLI {
+	f := newCommandFactory()
+	c := appkit.NewCLI(
+		model.NewApp("designlanguage", version, ".sundries"),
+		"designlanguage",
+		"Tools for the Nonzero Sum Design Language.",
+		f,
+	)
+
+	f.setCLI(c)
+
+	return c
 }
 
-func (c *dlCLI) NewRootCommand() (*cobra.Command, error) {
-	cmd := appkit.NewCommandBase(c)
-	cmd.AddCommand(newGenCmd(c))
-	return cmd, nil
+type cmdFactory struct {
+	cli gmodel.CLI
+}
+
+func newCommandFactory() *cmdFactory {
+	return &cmdFactory{}
+}
+
+func (f *cmdFactory) setCLI(i gmodel.CLI) {
+	f.cli = i
+}
+
+func (f *cmdFactory) New() *cobra.Command {
+	cmd := appkit.NewCommandBase(f.cli)
+	cmd.AddCommand(newGenCmd(f.cli))
+	return cmd
 }
 
 func init() {
 	appkit.DoInit(cli)
 }
 
-func CLI() model.CLI {
+func CLI() gmodel.CLI {
 	return cli
 }
